@@ -74,7 +74,14 @@ table 7003 "Price Asset"
             DataClassification = SystemMetadata;
 
             trigger OnValidate()
+            var
+                IsHandled: Boolean;
             begin
+                IsHandled := false;
+                OnBeforeValidateVariantCode(Rec, IsHandled);
+                if IsHandled then
+                    exit;
+
                 if "Variant Code" <> '' then begin
                     TestField("Asset Type", "Asset Type"::Item);
                     TestField("Asset No.");
@@ -318,6 +325,11 @@ table 7003 "Price Asset"
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeVerifyConsistentAssetType(var PriceAsset: Record "Price Asset"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeValidateVariantCode(var PriceAsset: Record "Price Asset"; var IsHandled: Boolean)
     begin
     end;
 }
